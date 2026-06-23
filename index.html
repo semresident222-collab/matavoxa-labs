@@ -1,1738 +1,1770 @@
-import { useState } from "react";
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MetaVoxa Labs</title>
 
-const COPPER = "#B5673D";
+  <meta name="description" content="MetaVoxa Labs builds research infrastructure for invisible populations, neurodivergent health data, ethics-aligned cohort design, and policy translation." />
 
-const serif = { fontFamily: "'Source Serif 4', serif" };
-const mono = { fontFamily: "'JetBrains Mono', monospace" };
-const sans = { fontFamily: "'IBM Plex Sans', sans-serif" };
-
-const ORG_SCHEMA = {
-  "@context": "https://schema.org",
-  "@type": "Organization",
-  name: "MetaVoxa",
-  url: "https://metavoxa.com",
-  sameAs: [
-    "https://open.substack.com/pub/metavoxa",
-    "https://www.linkedin.com/in/martha-koroma-67a28b191",
-    "https://www.instagram.com/kwissbae",
-    "https://orcid.org/0000-0003-4152-3863",
-    "https://www.marthakoroma.com",
-    "https://cra.marthakoroma.com",
-    "https://github.com/semresident222-collab",
-  ],
-  founder: {
-    "@type": "Person",
-    name: "Martha Wuya Koroma",
-    url: "https://www.marthakoroma.com",
-  },
-};
-
-const STATUS_C = {
-  Active: "#7A4020",
-  "Active Research": "#7A4020",
-  "Active Preparation": "#7A4020",
-  Published: "#2E6830",
-  Submitted: "#2E6830",
-  Investigating: "#2A5078",
-  "Research Phase": "#2A5078",
-  Validation: "#2A5078",
-  "Protocol Stage": "#2A5078",
-  Development: "#7A4A18",
-  "Evidence Mapping": "#7A4A18",
-  "In Progress": "#7A4A18",
-  Forming: "#555560",
-};
-
-const LAYERS = [
-  {
-    id: "observations",
-    num: "01",
-    prefix: "OBS",
-    name: "Observations",
-    subtitle: "What systems don't see.",
-    description:
-      "Early signals, systemic blind spots, and real-world patterns that conventional systems overlook or misinterpret.",
-    current: [
-      {
-        id: "001",
-        title: "Neurodivergent Women in Healthcare",
-        type: "Clinical Observation",
-        desc: "Clinical experiences frequently minimized, misattributed, or documented inaccurately.",
-        detail:
-          "The clinical room records 'no concerns' for patients whose cultural conditioning teaches that naming struggle is weakness. The observation: the system isn't failing to document these women — it lacks the instrument to document what they actually carry.",
-        status: "Investigating",
-        firstNoted: "12 MAR 2024",
-        updated: "14 JUN 2026",
-      },
-      {
-        id: "002",
-        title: "Masking and Diagnostic Delay",
-        type: "Behavioral Pattern",
-        desc: "The relationship between masking behaviors and delayed or missed diagnoses.",
-        detail:
-          "The most accurate data about masking exists in passive digital environments — phone usage patterns, sleep architecture, keystroke dynamics — not in 20-minute psychiatric interviews. Composed clinical presentation is being recorded as evidence against the complaint.",
-        status: "Investigating",
-        firstNoted: "21 FEB 2024",
-        updated: "03 JUN 2026",
-      },
-      {
-        id: "003",
-        title: "Adaptation Cost in Daily Functioning",
-        type: "Systemic Pattern",
-        desc: "The invisible cognitive and emotional labor required to appear functional.",
-        detail:
-          "When a person adapts successfully to an environment not built for them, the system records the adaptation as evidence of fit. It is not evidence of fit. It is evidence of labor — sustained, invisible, compounding — that accumulates entirely in the body performing it and appears nowhere in any output metric.",
-        status: "Investigating",
-        firstNoted: "05 JAN 2024",
-        updated: "29 MAY 2026",
-      },
-      {
-        id: "004",
-        title: "Categorical Rejection by Systems",
-        type: "Structural Observation",
-        desc: "The moment a system rejects a reality because it lacks the structure to interpret it.",
-        detail:
-          "Institutional 'I don't understand' is structurally indistinguishable from 'that doesn't exist.' The system isn't lying. It genuinely cannot see what it has no language for. This is not malice. It is architecture.",
-        status: "Active",
-        firstNoted: "18 NOV 2023",
-        updated: "10 JUN 2026",
-      },
-    ],
-    reserved: [
-      {
-        id: "00X",
-        title: "Autistic Adults in Pain Pathways",
-        desc: "Pain presentation and reporting patterns rarely captured in standard clinical assessments.",
-        priority: "High",
-        reserved: "02 JUN 2026",
-      },
-      {
-        id: "00X",
-        title: "Global South Neurodiversity Data Gaps",
-        desc: "Severe underrepresentation in neurodiversity research across LMIC contexts.",
-        priority: "High",
-        reserved: "18 APR 2026",
-      },
-      {
-        id: "00X",
-        title: "Intergenerational Diagnostic Patterns",
-        desc: "How diagnostic bias and cultural expectations repeat across generations.",
-        priority: "Medium",
-        reserved: "10 MAY 2026",
-      },
-    ],
-  },
-  {
-    id: "frameworks",
-    num: "02",
-    prefix: "DF",
-    name: "Frameworks",
-    subtitle: "How we make it measurable.",
-    description:
-      "Designing research-grade data frameworks and measurement models for phenomena existing instruments were not built to detect.",
-    current: [
-      {
-        id: "001",
-        title: "ADHD Digital Biomarker",
-        type: "Digital Phenotyping Framework",
-        desc: "Measuring cognitive effort and functional variability in real-world contexts.",
-        detail:
-          "Patent filed: Aktenzeichen 20 2026 002 446.1. Charité feasibility collaboration active. The premise: passive digital monitoring can produce data reliable enough to make the masking load of adult ADHD measurable in a population the clinical room cannot currently see.",
-        status: "Research Phase",
-        firstNoted: "08 SEP 2025",
-        updated: "14 JUN 2026",
-      },
-      {
-        id: "002",
-        title: "Masking Load Index (MLI)",
-        type: "Psychosocial Measurement Framework",
-        desc: "Quantifying invisible labor and compensatory behaviors.",
-        detail:
-          "Rather than asking whether a person appears functional, the MLI asks how much effort is required to maintain that appearance. The question underneath: can the cost of adaptation be quantified — or does measurement itself flatten what it tries to capture?",
-        status: "Validation",
-        firstNoted: "14 NOV 2025",
-        updated: "08 JUN 2026",
-      },
-      {
-        id: "003",
-        title: "Adaptation Cost Framework",
-        type: "Systemic Burden Model",
-        desc: "Assessing the hidden cost of navigating environments not designed for you.",
-        detail:
-          "The cumulative physical, emotional, cognitive, social, and financial burden required to function within an environment not calibrated for one's needs. A system that records adaptation without recording its cost is measuring only part of reality.",
-        status: "Development",
-        firstNoted: "22 JAN 2026",
-        updated: "02 JUN 2026",
-      },
-      {
-        id: "004",
-        title: "Functional Pain Framework",
-        type: "Interpretive & Diagnostic Model",
-        desc: "Improving recognition of pain that does not conform to traditional models.",
-        detail:
-          "Pain presentation varies systematically across neurodivergent populations and cultural contexts. The framework investigates what 'valid pain' looks like when the patient has been trained, across generations, not to produce the clinical register the system recognizes.",
-        status: "Evidence Mapping",
-        firstNoted: "03 MAR 2026",
-        updated: "28 MAY 2026",
-      },
-    ],
-    reserved: [
-      {
-        id: "00X",
-        title: "Neurodivergent Fatigue Model",
-        desc: "A framework to capture fatigue beyond physical exertion.",
-        priority: "High",
-        reserved: "02 JUN 2026",
-      },
-      {
-        id: "00X",
-        title: "Sensor-Informed Clinical Model",
-        desc: "Integrating wearable and self-report data into clinical decision support.",
-        priority: "Medium",
-        reserved: "15 MAY 2026",
-      },
-      {
-        id: "00X",
-        title: "Interpretive Sovereignty Index",
-        desc: "Measuring the right to define and explain one's own experience.",
-        priority: "High",
-        reserved: "20 APR 2026",
-      },
-    ],
-  },
-  {
-    id: "cohorts",
-    num: "03",
-    prefix: "COH",
-    name: "Cohorts",
-    subtitle: "Who we center.",
-    description:
-      "Population design models built around the people existing research infrastructure was not designed to include.",
-    current: [
-      {
-        id: "001",
-        title: "Neurodivergent Women",
-        type: "Primary Research Cohort",
-        desc: "West African born-and-raised women who migrated to Europe between ages 15–25.",
-        detail:
-          "Dr. med. research protocol active at Charité Berlin. Qualitative interview framework designed. The inclusion criteria are specific by design — validity requires honesty about what the data was actually built to hold. Populations included from the first inclusion criterion, not added as diversity footnotes after primary analysis.",
-        status: "Active Research",
-        firstNoted: "06 MAR 2024",
-        updated: "14 JUN 2026",
-      },
-    ],
-    reserved: [
-      {
-        id: "00X",
-        title: "Black Women",
-        desc: "Broader diaspora cohort — diagnostic pathways, institutional navigation, and recognition patterns.",
-        priority: "High",
-        reserved: "—",
-      },
-      {
-        id: "00X",
-        title: "Migrant Populations",
-        desc: "Migration as an undocumented diagnostic variable. Cross-jurisdictional recognition gaps.",
-        priority: "High",
-        reserved: "—",
-      },
-      {
-        id: "00X",
-        title: "Global Health Cohorts",
-        desc: "Cross-cultural neurodivergent cohort in LMIC and underrepresented regions.",
-        priority: "High",
-        reserved: "—",
-      },
-    ],
-  },
-  {
-    id: "evidence",
-    num: "04",
-    prefix: "EV",
-    name: "Evidence",
-    subtitle: "What we learn.",
-    description:
-      "Research outputs — publications, preprints, qualitative archives, and academic collaborations that convert observation into citable evidence.",
-    current: [
-      {
-        id: "001",
-        title: "Zenodo Preprint Archive",
-        type: "Open Access Publications",
-        desc: "Aduhelm efficacy analysis, KEYNOTE-991 protocol review, ADHD digital biomarker feasibility.",
-        detail:
-          "Open-access preprints deposited on Zenodo, reaching the research community with work that has not waited for the peer-review cycle to catch up. Each publication is the institutional-grade version of an observation that began in lived reality.",
-        status: "Published",
-        firstNoted: "15 OCT 2025",
-        updated: "10 JUN 2026",
-      },
-      {
-        id: "002",
-        title: "The Lancet Psychiatry Collaboration",
-        type: "Peer-Reviewed Publication",
-        desc: "Co-authored research in The Lancet Psychiatry. ORCID: 0000-0003-4152-3863.",
-        detail:
-          "The credibility layer. Evidence that the work can survive the institutional validation process it is simultaneously questioning — and that these two things are not contradictions.",
-        status: "Published",
-        firstNoted: "22 AUG 2025",
-        updated: "03 JUN 2026",
-      },
-      {
-        id: "003",
-        title: "365 Pattern Thoughts",
-        type: "Qualitative Evidence Archive",
-        desc: "A year of daily cognitive observations documenting AuDHD lived experience.",
-        detail:
-          "This is not peer-reviewed. It is also more accurate than any clinical scale encountered in the same period. The tension between these two statements is itself a research finding. Pattern Thoughts is evidence of what counts as evidence — and what the current framework excludes by definition.",
-        status: "In Progress",
-        firstNoted: "01 JAN 2026",
-        updated: "21 JUN 2026",
-      },
-      {
-        id: "004",
-        title: "Dr. med. Research Program",
-        type: "Doctoral Research — Charité Berlin",
-        desc: "Qualitative study — cultural non-recognition mechanisms in West African neurodivergent women.",
-        detail:
-          "The question that generated it: Why do the same women who find MetaVoxa online never appear in the clinical system? The study is designed to investigate the mechanisms, not assume the answer.",
-        status: "Protocol Stage",
-        firstNoted: "14 FEB 2026",
-        updated: "08 JUN 2026",
-      },
-    ],
-    reserved: [
-      {
-        id: "00X",
-        title: "Cross-Border Ethics Publication",
-        desc: "What consent means when data subject, collector, and algorithm were trained in three different jurisdictions.",
-        priority: "High",
-        reserved: "—",
-      },
-      {
-        id: "00X",
-        title: "Policy Translation Methodology Paper",
-        desc: "A formal methodology paper on translating lived experience into policy-grade evidence.",
-        priority: "Medium",
-        reserved: "—",
-      },
-    ],
-  },
-  {
-    id: "translation",
-    num: "05",
-    prefix: "TR",
-    name: "Translation",
-    subtitle: "Where it changes systems.",
-    description:
-      "Policy translation, regulatory analysis, and the mechanisms that carry evidence from where it is produced to where it needs to change things.",
-    current: [
-      {
-        id: "001",
-        title: "Falling Walls 2026",
-        type: "Science Breakthrough Pitch",
-        desc: "3 minutes to make neurodivergent African women visible to scientists, investors, and policymakers.",
-        detail:
-          "July 7, 2026. The pitch is not for the judges. It is for the one person in the audience who recognises themselves. Visibility in the wrong room is still visibility — if it brings the right resources back to the people who were never in the room.",
-        status: "Active Preparation",
-        firstNoted: "02 APR 2026",
-        updated: "18 JUN 2026",
-      },
-      {
-        id: "002",
-        title: "ACRP 2027 Submissions",
-        type: "Conference Proposals",
-        desc: "KEYNOTE-991 protocol analysis and ADHD feasibility study for clinical research audiences.",
-        detail:
-          "Translation work — building the credibility and institutional fluency that allows MetaVoxa's core arguments to be received by the rooms that need to hear them. One well-placed, precisely translated piece is worth more than broad distribution of something that lost its specificity in transit.",
-        status: "Submitted",
-        firstNoted: "15 MAY 2026",
-        updated: "15 MAY 2026",
-      },
-      {
-        id: "003",
-        title: "GDPR Article 9 Cross-Border Framework",
-        type: "Regulatory Analysis",
-        desc: "How a database built under EU special-category rules remains usable for African health policymakers.",
-        detail:
-          "The woman in Lagos who needs this database and the woman in Berlin who can build it are separated by more than geography — they are separated by what 'consent' means. Preliminary mapping: Nigerian Data Protection Act 2023, Ghana Data Protection Act 2012, GDPR Article 9.",
-        status: "Forming",
-        firstNoted: "28 MAR 2026",
-        updated: "12 JUN 2026",
-      },
-    ],
-    reserved: [
-      {
-        id: "00X",
-        title: "ECOWAS Health Governance Entry",
-        desc: "Identifying institutional gatekeepers in West African regional health policy.",
-        priority: "High",
-        reserved: "—",
-      },
-      {
-        id: "00X",
-        title: "Nigerian Ministry of Health Pathway",
-        desc: "Neurodivergence as a policy category in national health strategy.",
-        priority: "High",
-        reserved: "—",
-      },
-      {
-        id: "00X",
-        title: "West African Clinical Network",
-        desc: "Carrying validated frameworks into clinical practice across Lagos, Accra, and Freetown.",
-        priority: "Medium",
-        reserved: "—",
-      },
-    ],
-  },
-];
-
-function OpenFolderModal({ card, prefix, layerName, onClose }) {
-  const statusColor = STATUS_C[card.status] || "#555560";
-
-  return (
-    <div className="mv-modal-backdrop" onClick={onClose}>
-      <div className="mv-open-folder" onClick={(e) => e.stopPropagation()}>
-        <button className="mv-close" onClick={onClose}>
-          ×
-        </button>
-
-        <div className="mv-folder-tab-open">
-          <span>{prefix}-{card.id}</span>
-          <span>{layerName}</span>
-        </div>
-
-        <div className="mv-folder-cover-lip" />
-
-        <div className="mv-folder-paper">
-          <div className="mv-file-meta">
-            <span>{prefix}-{card.id}</span>
-            <span>·</span>
-            <span>{layerName.toUpperCase()}</span>
-          </div>
-
-          {card.type && <div className="mv-file-type">{card.type}</div>}
-
-          <h2>{card.title}</h2>
-
-          {card.status && (
-            <span
-              className="mv-status-pill"
-              style={{
-                color: statusColor,
-                background: `${statusColor}18`,
-                borderColor: `${statusColor}40`,
-              }}
-            >
-              {card.status}
-            </span>
-          )}
-
-          <div className="mv-rule" />
-
-          <p className="mv-desc">{card.desc}</p>
-
-          {card.detail && <p className="mv-detail">{card.detail}</p>}
-
-          {card.firstNoted && (
-            <div className="mv-dates">
-              <span>First noted: {card.firstNoted}</span>
-              <span>Updated: {card.updated}</span>
-            </div>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
-
-function FolderFile({ card, prefix, isReserved, index, onClick }) {
-  const [hovered, setHovered] = useState(false);
-  const statusColor = STATUS_C[card.status] || "#555560";
-
-  return (
-    <button
-      className={`mv-folder-file ${isReserved ? "reserved" : ""}`}
-      onClick={() => !isReserved && onClick(card)}
-      onMouseEnter={() => !isReserved && setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      style={{
-        transform: hovered
-          ? `translateY(-8px) rotate(${index % 2 === 0 ? "-1deg" : "1deg"})`
-          : `translateY(${index * -2}px) rotate(${index % 2 === 0 ? "-0.7deg" : "0.7deg"})`,
-        zIndex: hovered ? 50 : 20 - index,
-      }}
-    >
-      <div className="mv-folder-side-tab">
-        <span>{prefix}-{card.id}</span>
-      </div>
-
-      <div className="mv-folder-top-tab">
-        <span>{isReserved ? "RESERVED" : card.status}</span>
-      </div>
-
-      <div className="mv-folder-face">
-        <div className="mv-folder-code">{prefix}-{card.id}</div>
-
-        <h4>{card.title}</h4>
-
-        <p>{card.desc}</p>
-
-        <div className="mv-folder-bottom">
-          {isReserved ? (
-            <span>Priority: {card.priority}</span>
-          ) : (
-            <span style={{ color: statusColor }}>{card.status}</span>
-          )}
-        </div>
-      </div>
-    </button>
-  );
-}
-
-function FolderStack({ layer, onCardClick }) {
-  return (
-    <div className="mv-folder-stack-wrap">
-      <div className="mv-stack-label">
-        <span>Current Files</span>
-        <span>{layer.current.length} active</span>
-      </div>
-
-      <div className="mv-folder-stack active-stack">
-        {layer.current.map((card, index) => (
-          <FolderFile
-            key={`${layer.prefix}-${card.id}-${index}`}
-            card={card}
-            prefix={layer.prefix}
-            isReserved={false}
-            index={index}
-            onClick={(c) => onCardClick(c, layer.name, layer.prefix)}
-          />
-        ))}
-      </div>
-
-      <div className="mv-stack-label reserved-label">
-        <span>Reserved Files</span>
-        <span>{layer.reserved.length} future</span>
-      </div>
-
-      <div className="mv-folder-stack reserved-stack">
-        {layer.reserved.map((card, index) => (
-          <FolderFile
-            key={`${layer.prefix}-reserved-${index}`}
-            card={card}
-            prefix={layer.prefix}
-            isReserved={true}
-            index={index}
-            onClick={() => {}}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function Drawer({ layer, idx, isOpen, onToggle, onCardClick }) {
-  return (
-    <div className="mv-drawer-unit">
-      <button
-        className={`mv-drawer-front ${isOpen ? "open" : ""}`}
-        onClick={() => onToggle(idx)}
-      >
-        <div className="mv-drawer-label">
-          <span>{layer.num}</span>
-          <strong>{layer.name}</strong>
-          <em>{layer.subtitle}</em>
-        </div>
-
-        <div className="mv-drawer-handle" />
-
-        <div className="mv-drawer-counts">
-          <span>{layer.current.length} ACTIVE</span>
-          <span>{layer.reserved.length} RESERVED</span>
-        </div>
-
-        <div className="mv-drawer-arrow">{isOpen ? "↓" : "›"}</div>
-      </button>
-
-      <div className={`mv-drawer-interior ${isOpen ? "open" : ""}`}>
-        <div className="mv-drawer-shadow" />
-
-        <p className="mv-layer-description">{layer.description}</p>
-
-        <FolderStack layer={layer} onCardClick={onCardClick} />
-      </div>
-    </div>
-  );
-}
-
-export default function MetaVoxaLabs() {
-  const [openDrawer, setOpenDrawer] = useState(null);
-  const [selectedCard, setSelectedCard] = useState(null);
-  const [selMeta, setSelMeta] = useState({ layerName: "", prefix: "" });
-  const [dark, setDark] = useState(true);
-
-  const tc = dark
-    ? {
-        heroBg: "#0c0d0f",
-        text: "#E9E4D6",
-        textSec: "#8a93a6",
-        pillBg: "#181a1d",
-        pillBorder: "#252830",
-        arcBg: "#0a0b0d",
-        footerBg: "#0c0d0f",
-        footerBorder: "#1e2024",
-        divider: "#1e2024",
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "MetaVoxa",
+      "url": "https://metavoxa.com",
+      "sameAs": [
+        "https://open.substack.com/pub/metavoxa",
+        "https://www.linkedin.com/in/martha-koroma-67a28b191",
+        "https://www.instagram.com/kwissbae",
+        "https://orcid.org/0000-0003-4152-3863",
+        "https://www.marthakoroma.com",
+        "https://cra.marthakoroma.com",
+        "https://github.com/semresident222-collab"
+      ],
+      "founder": {
+        "@type": "Person",
+        "name": "Martha Wuya Koroma",
+        "url": "https://www.marthakoroma.com"
       }
-    : {
-        heroBg: "#F2EFE7",
-        text: "#1B1E22",
-        textSec: "#4A5A72",
-        pillBg: "#E8E3D5",
-        pillBorder: "#D8D2C2",
-        arcBg: "#EAE5D8",
-        footerBg: "#E4DFD2",
-        footerBorder: "#D8D2C2",
-        divider: "#D8D2C2",
-      };
-
-  const handleCardClick = (card, layerName, prefix) => {
-    setSelectedCard(card);
-    setSelMeta({ layerName, prefix });
-  };
-
-  const handleToggle = (idx) => {
-    setOpenDrawer((prev) => (prev === idx ? null : idx));
-  };
-
-  return (
-    <div className="mv-page" style={{ background: tc.heroBg, color: tc.text }}>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(ORG_SCHEMA) }}
-      />
-
-      <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
-
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-        }
-
-        html {
-          scroll-behavior: smooth;
-        }
-
-        body {
-          margin: 0;
-        }
-
-        ::-webkit-scrollbar {
-          width: 5px;
-        }
-
-        ::-webkit-scrollbar-track {
-          background: transparent;
-        }
-
-        ::-webkit-scrollbar-thumb {
-          background: ${COPPER}66;
-          border-radius: 3px;
-        }
-
-        .mv-page {
-          min-height: 100vh;
-          ${sans.fontFamily ? `font-family: 'IBM Plex Sans', sans-serif;` : ""}
-        }
-
-        .mv-nav {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          padding: 18px 40px;
-          border-bottom: 1px solid ${tc.divider};
-          flex-wrap: wrap;
-          gap: 12px;
-        }
-
-        .mv-nav-brand {
-          display: flex;
-          align-items: baseline;
-          gap: 18px;
-        }
-
-        .mv-nav-brand span {
-          font-family: 'Source Serif 4', serif;
-          font-size: 17px;
-          font-weight: 700;
-          letter-spacing: 0.12em;
-        }
-
-        .mv-nav-brand a {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: ${tc.textSec};
-          letter-spacing: 0.06em;
-          text-decoration: none;
-        }
-
-        .mv-nav-right {
-          display: flex;
-          align-items: center;
-          gap: 20px;
-          flex-wrap: wrap;
-        }
-
-        .mv-nav-right span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: ${tc.textSec};
-          letter-spacing: 0.04em;
-        }
-
-        .mv-toggle {
-          width: 40px;
-          height: 22px;
-          border-radius: 11px;
-          border: none;
-          background: ${dark ? "#2a2c30" : "#D8D2C2"};
-          position: relative;
-          cursor: pointer;
-          transition: background 0.3s ease;
-          flex-shrink: 0;
-        }
-
-        .mv-toggle div {
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          background: ${dark ? "#E9E4D6" : "#1B1E22"};
-          position: absolute;
-          top: 3px;
-          left: ${dark ? "21px" : "3px"};
-          transition: left 0.3s ease;
-        }
-
-        .mv-hero {
-          min-height: 100vh;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .mv-hero-inner {
-          flex: 1;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          padding: 60px 40px 80px;
-          max-width: 940px;
-        }
-
-        .mv-kicker {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          letter-spacing: 0.14em;
-          color: ${COPPER};
-          text-transform: uppercase;
-          margin-bottom: 30px;
-        }
-
-        .mv-hero-lead {
-          font-family: 'Source Serif 4', serif;
-          font-size: 18px;
-          font-weight: 400;
-          color: ${tc.textSec};
-          line-height: 1.6;
-          margin-bottom: 14px;
-        }
-
-        .mv-hero-lead em {
-          color: ${tc.text};
-        }
-
-        .mv-hero h1 {
-          font-family: 'Source Serif 4', serif;
-          font-size: 44px;
-          font-weight: 700;
-          line-height: 1.18;
-          color: ${tc.text};
-          max-width: 840px;
-          margin-bottom: 50px;
-        }
-
-        .mv-hero h1 em {
-          color: ${COPPER};
-          font-style: italic;
-        }
-
-        .mv-copper-line {
-          width: 56px;
-          height: 2px;
-          background: ${COPPER};
-          margin-bottom: 44px;
-        }
-
-        .mv-principles {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 14px;
-          margin-bottom: 50px;
-          max-width: 840px;
-        }
-
-        .mv-principle {
-          background: ${tc.pillBg};
-          border: 1px solid ${tc.pillBorder};
-          border-radius: 5px;
-          padding: 18px 20px;
-        }
-
-        .mv-principle .num {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: ${COPPER};
-          letter-spacing: 0.06em;
-          margin-bottom: 10px;
-        }
-
-        .mv-principle strong {
-          display: block;
-          font-family: 'Source Serif 4', serif;
-          font-size: 15px;
-          font-weight: 600;
-          margin-bottom: 8px;
-          line-height: 1.3;
-        }
-
-        .mv-principle p {
-          font-size: 12px;
-          color: ${tc.textSec};
-          line-height: 1.55;
-        }
-
-        .mv-archive-link {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 11px;
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          color: ${COPPER};
-          text-decoration: none;
-          display: inline-flex;
-          align-items: center;
-          gap: 8px;
-          border: 1px solid ${COPPER}55;
-          border-radius: 4px;
-          padding: 12px 26px;
-          width: fit-content;
-          transition: all 0.2s ease;
-        }
-
-        .mv-archive-link:hover {
-          background: ${COPPER}12;
-          border-color: ${COPPER};
-        }
-
-        .mv-archive {
-          padding: 70px 40px 80px;
-          background: ${tc.arcBg};
-        }
-
-        .mv-archive-inner {
-          max-width: 980px;
-          margin: 0 auto;
-        }
-
-        .mv-archive-header {
-          margin-bottom: 32px;
-        }
-
-        .mv-archive-mini {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          letter-spacing: 0.12em;
-          color: ${tc.textSec};
-          text-transform: uppercase;
-          margin-bottom: 8px;
-        }
-
-        .mv-archive-title-row {
-          display: flex;
-          justify-content: space-between;
-          align-items: baseline;
-          flex-wrap: wrap;
-          gap: 8px;
-        }
-
-        .mv-archive-title-row h2 {
-          font-family: 'Source Serif 4', serif;
-          font-size: 26px;
-          font-weight: 700;
-          color: ${tc.text};
-        }
-
-        .mv-archive-title-row span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: ${tc.textSec};
-          letter-spacing: 0.04em;
-        }
-
-        .mv-header-rule {
-          height: 1px;
-          background: ${tc.divider};
-          margin-top: 16px;
-        }
-
-        .mv-cabinet {
-          background: linear-gradient(168deg, #252218 0%, #1A1910 50%, #1E1D12 100%);
-          border: 2px solid #3A3720;
-          border-radius: 12px;
-          padding: 18px;
-          box-shadow:
-            0 40px 100px rgba(0,0,0,0.7),
-            0 10px 30px rgba(0,0,0,0.5),
-            inset 0 1px 0 rgba(200,185,80,0.05),
-            inset 0 -2px 0 rgba(0,0,0,0.5);
-        }
-
-        .mv-cabinet-top {
-          height: 18px;
-          border-radius: 6px 6px 0 0;
-          margin-bottom: 12px;
-          background: linear-gradient(180deg, #3A3720 0%, #2C2A18 100%);
-          box-shadow: inset 0 1px 0 rgba(200,185,80,0.1);
-        }
-
-        .mv-drawer-unit {
-          margin-bottom: 4px;
-        }
-
-        .mv-drawer-front {
-          width: 100%;
-          min-height: 82px;
-          border: 1px solid #3A3720;
-          border-top: 1px solid #4A4530;
-          border-bottom: 1px solid #14130A;
-          background: linear-gradient(180deg, #2D2919 0%, #222012 50%, #1C1B0E 100%);
-          display: grid;
-          grid-template-columns: auto 1fr auto auto;
-          align-items: center;
-          gap: 18px;
-          padding: 0 20px;
-          cursor: pointer;
-          color: inherit;
-          text-align: left;
-          transition: all 0.22s ease;
-          box-shadow: 0 2px 8px rgba(0,0,0,0.35);
-        }
-
-        .mv-drawer-front.open {
-          background: linear-gradient(180deg, #362F1F 0%, #272412 100%);
-          border-left: 3px solid ${COPPER};
-          border-bottom: 1px solid ${COPPER}55;
-          transform: translateY(2px);
-          box-shadow:
-            0 6px 22px rgba(0,0,0,0.55),
-            inset 0 -1px 0 ${COPPER}25;
-        }
-
-        .mv-drawer-label {
-          background: #F5F0DC;
-          border: 1px solid #C8B870;
-          border-radius: 3px;
-          padding: 7px 14px;
-          min-width: 190px;
-          box-shadow:
-            inset 0 1px 3px rgba(0,0,0,0.12),
-            0 1px 0 rgba(200,185,80,0.12);
-        }
-
-        .mv-drawer-label span {
-          display: block;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: #8B6910;
-          letter-spacing: 0.05em;
-        }
-
-        .mv-drawer-label strong {
-          display: block;
-          font-family: 'Source Serif 4', serif;
-          font-size: 14px;
-          font-weight: 700;
-          color: #1A1208;
-          margin-top: 1px;
-          line-height: 1;
-          text-transform: uppercase;
-        }
-
-        .mv-drawer-label em {
-          display: block;
-          font-family: 'IBM Plex Sans', sans-serif;
-          font-size: 10px;
-          color: #6B5A30;
-          margin-top: 4px;
-          line-height: 1.2;
-          font-style: normal;
-        }
-
-        .mv-drawer-handle {
-          justify-self: center;
-          width: 74px;
-          height: 22px;
-          border-radius: 999px;
-          border: 1px solid #6E4C06;
-          background:
-            radial-gradient(circle at 50% 28%, #D4A855, #A07828 42%, #6E4C06 100%);
-          box-shadow:
-            0 2px 8px rgba(0,0,0,0.55),
-            inset 0 1px 2px rgba(255,230,100,0.25);
-        }
-
-        .mv-drawer-counts {
-          text-align: right;
-          display: flex;
-          flex-direction: column;
-          gap: 4px;
-        }
-
-        .mv-drawer-counts span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          letter-spacing: 0.04em;
-          color: #8B7040;
-          white-space: nowrap;
-        }
-
-        .mv-drawer-counts span:last-child {
-          color: #5A4F30;
-        }
-
-        .mv-drawer-arrow {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 18px;
-          color: ${COPPER};
-          width: 18px;
-          text-align: center;
-        }
-
-        .mv-drawer-interior {
-          overflow: hidden;
-          max-height: 0;
-          background:
-            linear-gradient(180deg, rgba(7,7,5,0.45) 0%, rgba(22,20,12,1) 22%),
-            #16140C;
-          border: 1px solid #2A2818;
-          border-top: none;
-          transition: max-height 0.45s ease;
-          position: relative;
-        }
-
-        .mv-drawer-interior.open {
-          max-height: 2200px;
-        }
-
-        .mv-drawer-shadow {
-          height: 18px;
-          background: linear-gradient(180deg, rgba(0,0,0,0.6), transparent);
-        }
-
-        .mv-layer-description {
-          font-size: 13px;
-          color: #9A8F68;
-          line-height: 1.65;
-          margin: 4px 22px 20px;
-          padding-bottom: 16px;
-          border-bottom: 1px solid #252318;
-        }
-
-        .mv-folder-stack-wrap {
-          padding: 0 22px 28px;
-        }
-
-        .mv-stack-label {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          color: ${COPPER};
-          letter-spacing: 0.1em;
-          text-transform: uppercase;
-          margin-bottom: 14px;
-          border-bottom: 1px solid #2A2818;
-          padding-bottom: 8px;
-        }
-
-        .reserved-label {
-          margin-top: 28px;
-          color: #6B5A30;
-        }
-
-        .mv-folder-stack {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 16px 18px;
-          perspective: 1000px;
-        }
-
-        .mv-folder-file {
-          position: relative;
-          min-height: 160px;
-          border: none;
-          background: transparent;
-          cursor: pointer;
-          text-align: left;
-          transition: transform 0.22s ease, filter 0.22s ease;
-          transform-origin: center bottom;
-        }
-
-        .mv-folder-file:hover {
-          filter: brightness(1.04);
-        }
-
-        .mv-folder-file.reserved {
-          cursor: default;
-          opacity: 0.58;
-          filter: saturate(0.7);
-        }
-
-        .mv-folder-top-tab {
-          position: absolute;
-          top: 0;
-          left: 28px;
-          height: 24px;
-          min-width: 130px;
-          padding: 5px 14px 0;
-          background: #E6D7A8;
-          border: 1px solid #BBA96E;
-          border-bottom: none;
-          border-radius: 8px 8px 0 0;
-          z-index: 3;
-          box-shadow: inset 0 1px 0 rgba(255,255,255,0.32);
-        }
-
-        .mv-folder-top-tab span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 8px;
-          color: #6B4F17;
-          letter-spacing: 0.05em;
-          text-transform: uppercase;
-          white-space: nowrap;
-        }
-
-        .mv-folder-side-tab {
-          position: absolute;
-          right: -7px;
-          top: 48px;
-          width: 28px;
-          height: 78px;
-          background: ${COPPER};
-          border-radius: 0 6px 6px 0;
-          z-index: 2;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          box-shadow: 4px 6px 16px rgba(0,0,0,0.24);
-        }
-
-        .mv-folder-side-tab span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 8px;
-          color: #FFF5DD;
-          writing-mode: vertical-rl;
-          transform: rotate(180deg);
-          letter-spacing: 0.05em;
-        }
-
-        .mv-folder-face {
-          position: relative;
-          top: 18px;
-          min-height: 142px;
-          background:
-            linear-gradient(180deg, #F8F1D8 0%, #E7D7A8 100%);
-          border: 1px solid #C5AD6A;
-          border-radius: 7px;
-          padding: 22px 20px 16px;
-          color: #1A1208;
-          box-shadow:
-            0 14px 28px rgba(0,0,0,0.28),
-            inset 0 1px 0 rgba(255,255,255,0.35);
-          overflow: hidden;
-        }
-
-        .mv-folder-face::after {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background:
-            linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.22) 40%, transparent 72%);
-          pointer-events: none;
-        }
-
-        .mv-folder-code {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          color: #8B7040;
-          letter-spacing: 0.04em;
-          margin-bottom: 8px;
-        }
-
-        .mv-folder-face h4 {
-          font-family: 'Source Serif 4', serif;
-          font-size: 17px;
-          line-height: 1.22;
-          font-weight: 700;
-          color: #0F0D06;
-          margin-bottom: 7px;
-          position: relative;
-          z-index: 1;
-        }
-
-        .mv-folder-face p {
-          font-family: 'IBM Plex Sans', sans-serif;
-          font-size: 12px;
-          line-height: 1.48;
-          color: #4A3E1A;
-          position: relative;
-          z-index: 1;
-        }
-
-        .mv-folder-bottom {
-          margin-top: 12px;
-          padding-top: 9px;
-          border-top: 1px solid rgba(120,90,35,0.22);
-          position: relative;
-          z-index: 1;
-        }
-
-        .mv-folder-bottom span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 8px;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-        }
-
-        .mv-reserved-note {
-          border: 1px dashed #2A2818;
-          border-radius: 4px;
-          padding: 12px 16px;
-          opacity: 0.4;
-        }
-
-        .mv-cabinet-footer {
-          margin-top: 12px;
-          background: #1A1810;
-          border: 1px solid #2A2818;
-          border-radius: 4px;
-          padding: 8px 16px;
-          display: flex;
-          justify-content: center;
-        }
-
-        .mv-cabinet-footer span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          color: #5A5030;
-          letter-spacing: 0.08em;
-          text-align: center;
-        }
-
-        .mv-locked-drawer {
-          margin-top: 4px;
-          min-height: 66px;
-          border: 1px solid #2A2818;
-          border-top: 1px solid #363520;
-          border-bottom: 1px solid #0E0E08;
-          background: linear-gradient(180deg, #1E1C12 0%, #191810 100%);
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 12px;
-          padding: 0 20px;
-          opacity: 0.5;
-        }
-
-        .mv-locked-label {
-          background: #EEE9D5;
-          border: 1px solid #B8A860;
-          border-radius: 2px;
-          padding: 6px 14px;
-          flex-shrink: 0;
-        }
-
-        .mv-locked-label span {
-          display: block;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: #6B5A30;
-          letter-spacing: 0.05em;
-        }
-
-        .mv-locked-label strong {
-          display: block;
-          font-family: 'Source Serif 4', serif;
-          font-size: 13px;
-          font-weight: 700;
-          color: #2A2010;
-          margin-top: 1px;
-        }
-
-        .mv-locked-label em {
-          display: block;
-          font-family: 'IBM Plex Sans', sans-serif;
-          font-size: 10px;
-          color: #6B5A30;
-          margin-top: 2px;
-          font-style: normal;
-        }
-
-        .mv-lock {
-          font-size: 20px;
-          color: #4A4030;
-        }
-
-        .mv-footer {
-          background: ${tc.footerBg};
-          border-top: 1px solid ${tc.footerBorder};
-          padding: 18px 40px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          gap: 12px;
-        }
-
-        .mv-footer-quote {
-          font-family: 'Source Serif 4', serif;
-          font-style: italic;
-          font-size: 13px;
-          color: ${COPPER};
-        }
-
-        .mv-footer-tags,
-        .mv-footer-actions {
-          display: flex;
-          gap: 4px;
-          align-items: center;
-          flex-wrap: wrap;
-        }
-
-        .mv-footer-tags span,
-        .mv-footer-actions span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          letter-spacing: 0.06em;
-          color: ${tc.textSec};
-          text-transform: uppercase;
-        }
-
-        .mv-dot {
-          color: ${COPPER};
-          margin: 0 8px;
-        }
-
-        .mv-modal-backdrop {
-          position: fixed;
-          inset: 0;
-          background:
-            radial-gradient(circle at center, rgba(181,103,61,0.1), transparent 42%),
-            rgba(8,7,5,0.93);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 1000;
-          padding: 20px;
-          backdrop-filter: blur(7px);
-          cursor: pointer;
-        }
-
-        .mv-open-folder {
-          position: relative;
-          width: min(720px, 100%);
-          max-height: 88vh;
-          cursor: default;
-          animation: folderRise 0.24s ease both;
-        }
-
-        @keyframes folderRise {
-          from {
-            opacity: 0;
-            transform: translateY(16px) scale(0.98);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-          }
-        }
-
-        .mv-close {
-          position: absolute;
-          top: 18px;
-          right: 18px;
-          z-index: 20;
-          width: 32px;
-          height: 32px;
-          border-radius: 50%;
-          border: 1px solid #C4B078;
-          background: rgba(248,244,232,0.75);
-          color: #6B5A20;
-          cursor: pointer;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 18px;
-          line-height: 1;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .mv-folder-tab-open {
-          position: relative;
-          z-index: 3;
-          width: fit-content;
-          min-width: 260px;
-          background: #E5D197;
-          border: 1px solid #BBA96E;
-          border-bottom: none;
-          border-radius: 12px 12px 0 0;
-          padding: 10px 18px 8px;
-          display: flex;
-          gap: 16px;
-          align-items: center;
-          box-shadow: 0 -6px 20px rgba(0,0,0,0.18);
-        }
-
-        .mv-folder-tab-open span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          color: #6B4F17;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-        }
-
-        .mv-folder-cover-lip {
-          height: 38px;
-          background: linear-gradient(180deg, #E8D8A8, #D3B86F);
-          border: 1px solid #BBA96E;
-          border-bottom: none;
-          border-radius: 0 12px 0 0;
-          box-shadow:
-            0 18px 24px rgba(0,0,0,0.24),
-            inset 0 1px 0 rgba(255,255,255,0.28);
-        }
-
-        .mv-folder-paper {
-          background: #F8F4E8;
-          border: 1px solid #D4C89A;
-          border-top: none;
-          border-radius: 0 0 12px 12px;
-          padding: 34px 38px;
-          max-height: calc(88vh - 74px);
-          overflow-y: auto;
-          color: #1A1208;
-          box-shadow:
-            0 40px 100px rgba(0,0,0,0.72),
-            0 8px 30px rgba(0,0,0,0.4),
-            inset 0 1px 0 rgba(255,255,255,0.42);
-        }
-
-        .mv-file-meta {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          margin-bottom: 12px;
-        }
-
-        .mv-file-meta span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: #8B7040;
-          letter-spacing: 0.04em;
-        }
-
-        .mv-file-type {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 10px;
-          color: ${COPPER};
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          margin-bottom: 8px;
-        }
-
-        .mv-folder-paper h2 {
-          font-family: 'Source Serif 4', serif;
-          font-size: 25px;
-          font-weight: 700;
-          color: #0F0D06;
-          line-height: 1.25;
-          margin-bottom: 16px;
-          max-width: 600px;
-        }
-
-        .mv-status-pill {
-          display: inline-block;
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          letter-spacing: 0.06em;
-          text-transform: uppercase;
-          border: 1px solid;
-          padding: 4px 10px;
-          border-radius: 3px;
-          margin-bottom: 20px;
-        }
-
-        .mv-rule {
-          height: 1px;
-          background: #D8C890;
-          margin-bottom: 20px;
-        }
-
-        .mv-desc {
-          font-size: 14px;
-          line-height: 1.65;
-          color: #3A3010;
-          font-style: italic;
-          margin-bottom: 16px;
-        }
-
-        .mv-detail {
-          font-size: 14px;
-          line-height: 1.78;
-          color: #1A1208;
-          margin-bottom: 24px;
-        }
-
-        .mv-dates {
-          display: flex;
-          gap: 24px;
-          padding-top: 16px;
-          border-top: 1px solid #E0D090;
-          flex-wrap: wrap;
-        }
-
-        .mv-dates span {
-          font-family: 'JetBrains Mono', monospace;
-          font-size: 9px;
-          color: #8B7040;
-          letter-spacing: 0.03em;
-        }
-
-        @media (max-width: 780px) {
-          .mv-nav,
-          .mv-hero-inner,
-          .mv-archive,
-          .mv-footer {
-            padding-left: 22px;
-            padding-right: 22px;
-          }
-
-          .mv-hero h1 {
-            font-size: 33px;
-          }
-
-          .mv-principles {
-            grid-template-columns: 1fr;
-          }
-
-          .mv-drawer-front {
-            grid-template-columns: 1fr auto;
-            gap: 12px;
-            min-height: auto;
-            padding: 14px;
-          }
-
-          .mv-drawer-label {
-            min-width: 0;
-            width: 100%;
-          }
-
-          .mv-drawer-handle,
-          .mv-drawer-counts {
-            display: none;
-          }
-
-          .mv-folder-stack {
-            grid-template-columns: 1fr;
-          }
-
-          .mv-folder-stack-wrap {
-            padding-left: 14px;
-            padding-right: 14px;
-          }
-
-          .mv-layer-description {
-            margin-left: 14px;
-            margin-right: 14px;
-          }
-
-          .mv-folder-file {
-            min-height: 150px;
-          }
-
-          .mv-folder-paper {
-            padding: 30px 24px;
-          }
-
-          .mv-folder-paper h2 {
-            font-size: 22px;
-          }
-        }
-      `}</style>
-
-      <section className="mv-hero">
-        <nav className="mv-nav">
-          <div className="mv-nav-brand">
-            <span>METAVOXA LABS</span>
-            <a href="https://metavoxa.com">← METAVOXA</a>
-          </div>
-
-          <div className="mv-nav-right">
-            <span>
-              LAB STATUS{" "}
-              <span style={{ color: COPPER, marginLeft: 4 }}>● ACTIVE</span>
-            </span>
-            <span>21 JUN 2026</span>
-            <button
-              className="mv-toggle"
-              onClick={() => setDark(!dark)}
-              title="Toggle light/dark"
-            >
-              <div />
-            </button>
-          </div>
-        </nav>
-
-        <div className="mv-hero-inner">
-          <div className="mv-kicker">
-            Research Infrastructure for Invisible Populations
-          </div>
-
-          <p className="mv-hero-lead">
-            Traditional research asks: <em>What is happening?</em>
-          </p>
-
-          <h1>
-            MetaVoxa Labs asks:{" "}
-            <em>
-              What is happening that our systems are structurally incapable of
-              observing?
-            </em>
-          </h1>
-
-          <div className="mv-copper-line" />
-
-          <div className="mv-principles">
-            {[
-              {
-                num: "01",
-                label: "GDPR-Compliant Data Governance",
-                desc: "Frameworks that protect neurodivergent health data across jurisdictions, by design.",
-              },
-              {
-                num: "02",
-                label: "Ethics-Aligned Cohort Design",
-                desc: "Populations included from the first inclusion criterion — not added as diversity footnotes.",
-              },
-              {
-                num: "03",
-                label: "Policy Translation",
-                desc: "Evidence carried from where it is produced to where it needs to change things.",
-              },
-            ].map((p) => (
-              <div className="mv-principle" key={p.num}>
-                <div className="num">{p.num}</div>
-                <strong>{p.label}</strong>
-                <p>{p.desc}</p>
-              </div>
-            ))}
-          </div>
-
-          <a href="#archive" className="mv-archive-link">
-            Open the Archive ↓
-          </a>
+    }
+  </script>
+
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=IBM+Plex+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+    :root {
+      --copper: #B5673D;
+      --dark-bg: #0c0d0f;
+      --dark-archive: #0a0b0d;
+      --dark-text: #E9E4D6;
+      --dark-muted: #8a93a6;
+      --dark-line: #1e2024;
+
+      --light-bg: #F2EFE7;
+      --light-archive: #EAE5D8;
+      --light-text: #1B1E22;
+      --light-muted: #4A5A72;
+      --light-line: #D8D2C2;
+
+      --folder: #F8F1D8;
+      --folder-deep: #E7D7A8;
+      --folder-edge: #C5AD6A;
+      --paper: #F8F4E8;
+      --paper-line: #D8C890;
+      --ink: #1A1208;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: var(--dark-bg);
+      color: var(--dark-text);
+      transition: background 0.35s ease, color 0.35s ease;
+    }
+
+    body.light {
+      background: var(--light-bg);
+      color: var(--light-text);
+    }
+
+    ::-webkit-scrollbar {
+      width: 5px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(181, 103, 61, 0.45);
+      border-radius: 3px;
+    }
+
+    .page {
+      min-height: 100vh;
+      background: var(--dark-bg);
+      color: var(--dark-text);
+      transition: background 0.35s ease, color 0.35s ease;
+    }
+
+    body.light .page {
+      background: var(--light-bg);
+      color: var(--light-text);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 18px 40px;
+      border-bottom: 1px solid var(--dark-line);
+      flex-wrap: wrap;
+    }
+
+    body.light .nav {
+      border-bottom-color: var(--light-line);
+    }
+
+    .brand {
+      display: flex;
+      align-items: baseline;
+      gap: 18px;
+      flex-wrap: wrap;
+    }
+
+    .brand-title {
+      font-family: 'Source Serif 4', serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .brand a {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--dark-muted);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+    }
+
+    body.light .brand a {
+      color: var(--light-muted);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .nav-right span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.04em;
+      color: var(--dark-muted);
+    }
+
+    body.light .nav-right span {
+      color: var(--light-muted);
+    }
+
+    .active-dot {
+      color: var(--copper);
+      margin-left: 4px;
+    }
+
+    .theme-toggle {
+      width: 42px;
+      height: 23px;
+      border: none;
+      border-radius: 999px;
+      background: #2a2c30;
+      cursor: pointer;
+      position: relative;
+      transition: background 0.25s ease;
+    }
+
+    body.light .theme-toggle {
+      background: #D8D2C2;
+    }
+
+    .theme-toggle::after {
+      content: "";
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      border-radius: 50%;
+      top: 3px;
+      left: 22px;
+      background: var(--dark-text);
+      transition: left 0.25s ease, background 0.25s ease;
+    }
+
+    body.light .theme-toggle::after {
+      left: 3px;
+      background: var(--light-text);
+    }
+
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .hero-inner {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 60px 40px 80px;
+      max-width: 980px;
+    }
+
+    .kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      color: var(--copper);
+      text-transform: uppercase;
+      margin-bottom: 30px;
+    }
+
+    .hero-lead {
+      font-family: 'Source Serif 4', serif;
+      font-size: 18px;
+      color: var(--dark-muted);
+      line-height: 1.6;
+      margin-bottom: 14px;
+    }
+
+    body.light .hero-lead {
+      color: var(--light-muted);
+    }
+
+    .hero-lead em {
+      color: var(--dark-text);
+    }
+
+    body.light .hero-lead em {
+      color: var(--light-text);
+    }
+
+    h1 {
+      font-family: 'Source Serif 4', serif;
+      font-size: clamp(34px, 5vw, 58px);
+      font-weight: 700;
+      line-height: 1.12;
+      max-width: 920px;
+      margin-bottom: 46px;
+    }
+
+    h1 em {
+      color: var(--copper);
+      font-style: italic;
+    }
+
+    .copper-line {
+      width: 56px;
+      height: 2px;
+      background: var(--copper);
+      margin-bottom: 44px;
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-bottom: 48px;
+      max-width: 900px;
+    }
+
+    .principle {
+      background: #181a1d;
+      border: 1px solid #252830;
+      border-radius: 5px;
+      padding: 18px 20px;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+
+    body.light .principle {
+      background: #E8E3D5;
+      border-color: #D8D2C2;
+    }
+
+    .principle:hover {
+      transform: translateY(-4px);
+      border-color: rgba(181,103,61,0.65);
+    }
+
+    .principle-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--copper);
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+
+    .principle strong {
+      display: block;
+      font-family: 'Source Serif 4', serif;
+      font-size: 15px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .principle p {
+      font-size: 12px;
+      color: var(--dark-muted);
+      line-height: 1.55;
+    }
+
+    body.light .principle p {
+      color: var(--light-muted);
+    }
+
+    .archive-link {
+      width: fit-content;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      color: var(--copper);
+      text-transform: uppercase;
+      text-decoration: none;
+      border: 1px solid rgba(181,103,61,0.45);
+      border-radius: 4px;
+      padding: 12px 26px;
+      transition: all 0.2s ease;
+    }
+
+    .archive-link:hover {
+      background: rgba(181,103,61,0.08);
+      border-color: var(--copper);
+      transform: translateY(-2px);
+    }
+
+    .archive {
+      background: var(--dark-archive);
+      padding: 74px 40px 86px;
+      transition: background 0.35s ease;
+    }
+
+    body.light .archive {
+      background: var(--light-archive);
+    }
+
+    .archive-inner {
+      max-width: 1040px;
+      margin: 0 auto;
+    }
+
+    .archive-header {
+      margin-bottom: 34px;
+    }
+
+    .mini {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      color: var(--dark-muted);
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    body.light .mini {
+      color: var(--light-muted);
+    }
+
+    .archive-title-row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .archive-title-row h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 28px;
+      font-weight: 700;
+    }
+
+    .archive-title-row span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--dark-muted);
+      letter-spacing: 0.04em;
+    }
+
+    body.light .archive-title-row span {
+      color: var(--light-muted);
+    }
+
+    .header-rule {
+      height: 1px;
+      background: var(--dark-line);
+      margin-top: 17px;
+    }
+
+    body.light .header-rule {
+      background: var(--light-line);
+    }
+
+    .cabinet {
+      background: linear-gradient(168deg, #252218 0%, #1A1910 50%, #1E1D12 100%);
+      border: 2px solid #3A3720;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow:
+        0 44px 110px rgba(0,0,0,0.7),
+        0 10px 30px rgba(0,0,0,0.5),
+        inset 0 1px 0 rgba(200,185,80,0.05),
+        inset 0 -2px 0 rgba(0,0,0,0.5);
+    }
+
+    .cabinet-top {
+      height: 18px;
+      border-radius: 7px 7px 0 0;
+      margin-bottom: 12px;
+      background: linear-gradient(180deg, #3A3720 0%, #2C2A18 100%);
+      box-shadow: inset 0 1px 0 rgba(200,185,80,0.1);
+    }
+
+    .drawer {
+      margin-bottom: 4px;
+    }
+
+    .drawer-front {
+      width: 100%;
+      min-height: 84px;
+      border: 1px solid #3A3720;
+      border-top: 1px solid #4A4530;
+      border-bottom: 1px solid #14130A;
+      background: linear-gradient(180deg, #2D2919 0%, #222012 50%, #1C1B0E 100%);
+      display: grid;
+      grid-template-columns: auto 1fr auto auto;
+      align-items: center;
+      gap: 18px;
+      padding: 0 20px;
+      cursor: pointer;
+      color: inherit;
+      text-align: left;
+      transition: all 0.25s ease;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+    }
+
+    .drawer-front:hover {
+      filter: brightness(1.08);
+    }
+
+    .drawer.open .drawer-front {
+      background: linear-gradient(180deg, #382F1E 0%, #272412 100%);
+      border-left: 3px solid var(--copper);
+      border-bottom: 1px solid rgba(181,103,61,0.45);
+      transform: translateY(2px);
+      box-shadow:
+        0 8px 28px rgba(0,0,0,0.55),
+        inset 0 -1px 0 rgba(181,103,61,0.18);
+    }
+
+    .drawer-label {
+      background: #F5F0DC;
+      border: 1px solid #C8B870;
+      border-radius: 3px;
+      padding: 7px 14px;
+      min-width: 198px;
+      box-shadow:
+        inset 0 1px 3px rgba(0,0,0,0.12),
+        0 1px 0 rgba(200,185,80,0.12);
+    }
+
+    .drawer-label span {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #8B6910;
+      letter-spacing: 0.05em;
+    }
+
+    .drawer-label strong {
+      display: block;
+      font-family: 'Source Serif 4', serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #1A1208;
+      margin-top: 1px;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+
+    .drawer-label em {
+      display: block;
+      font-size: 10px;
+      color: #6B5A30;
+      margin-top: 4px;
+      line-height: 1.2;
+      font-style: normal;
+    }
+
+    .drawer-handle {
+      justify-self: center;
+      width: 76px;
+      height: 22px;
+      border-radius: 999px;
+      border: 1px solid #6E4C06;
+      background: radial-gradient(circle at 50% 28%, #D4A855, #A07828 42%, #6E4C06 100%);
+      box-shadow:
+        0 2px 8px rgba(0,0,0,0.55),
+        inset 0 1px 2px rgba(255,230,100,0.25);
+    }
+
+    .drawer-counts {
+      text-align: right;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .drawer-counts span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.04em;
+      color: #8B7040;
+      white-space: nowrap;
+    }
+
+    .drawer-counts span:last-child {
+      color: #5A4F30;
+    }
+
+    .drawer-arrow {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 20px;
+      color: var(--copper);
+      width: 20px;
+      text-align: center;
+      transition: transform 0.25s ease;
+    }
+
+    .drawer.open .drawer-arrow {
+      transform: rotate(90deg);
+    }
+
+    .drawer-interior {
+      max-height: 0;
+      overflow: hidden;
+      background:
+        linear-gradient(180deg, rgba(7,7,5,0.55) 0%, rgba(22,20,12,1) 20%),
+        #16140C;
+      border: 1px solid #2A2818;
+      border-top: none;
+      transition: max-height 0.5s ease;
+    }
+
+    .drawer.open .drawer-interior {
+      max-height: 2300px;
+    }
+
+    .drawer-shadow {
+      height: 18px;
+      background: linear-gradient(180deg, rgba(0,0,0,0.65), transparent);
+    }
+
+    .layer-description {
+      font-size: 13px;
+      color: #9A8F68;
+      line-height: 1.65;
+      margin: 4px 22px 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #252318;
+    }
+
+    .folder-area {
+      padding: 0 22px 30px;
+    }
+
+    .stack-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: var(--copper);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+      border-bottom: 1px solid #2A2818;
+      padding-bottom: 8px;
+    }
+
+    .stack-label.reserved {
+      margin-top: 30px;
+      color: #6B5A30;
+    }
+
+    .folder-stack {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 17px 19px;
+      perspective: 1000px;
+    }
+
+    .folder-file {
+      position: relative;
+      min-height: 166px;
+      border: none;
+      background: transparent;
+      text-align: left;
+      cursor: pointer;
+      transform-origin: center bottom;
+      transition: transform 0.25s ease, filter 0.25s ease;
+    }
+
+    .folder-file:hover {
+      transform: translateY(-8px) rotate(-0.5deg);
+      filter: brightness(1.04);
+      z-index: 20;
+    }
+
+    .folder-file.reserved {
+      cursor: default;
+      opacity: 0.56;
+      filter: saturate(0.72);
+    }
+
+    .folder-file.reserved:hover {
+      transform: none;
+      filter: saturate(0.72);
+    }
+
+    .folder-tab {
+      position: absolute;
+      top: 0;
+      left: 28px;
+      height: 24px;
+      min-width: 132px;
+      padding: 5px 14px 0;
+      background: #E6D7A8;
+      border: 1px solid #BBA96E;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
+      z-index: 3;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.32);
+    }
+
+    .folder-tab span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      color: #6B4F17;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .side-tab {
+      position: absolute;
+      right: -7px;
+      top: 50px;
+      width: 28px;
+      height: 78px;
+      background: var(--copper);
+      border-radius: 0 6px 6px 0;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 4px 6px 16px rgba(0,0,0,0.24);
+    }
+
+    .side-tab span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      color: #FFF5DD;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      letter-spacing: 0.05em;
+    }
+
+    .folder-face {
+      position: relative;
+      top: 18px;
+      min-height: 148px;
+      background: linear-gradient(180deg, var(--folder) 0%, var(--folder-deep) 100%);
+      border: 1px solid var(--folder-edge);
+      border-radius: 7px;
+      padding: 23px 20px 16px;
+      color: var(--ink);
+      box-shadow:
+        0 14px 28px rgba(0,0,0,0.28),
+        inset 0 1px 0 rgba(255,255,255,0.35);
+      overflow: hidden;
+    }
+
+    .folder-face::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 0%, rgba(255,255,255,0.22) 40%, transparent 72%);
+      pointer-events: none;
+    }
+
+    .file-code {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: #8B7040;
+      letter-spacing: 0.04em;
+      margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .folder-face h4 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 17px;
+      line-height: 1.22;
+      font-weight: 700;
+      color: #0F0D06;
+      margin-bottom: 7px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .folder-face p {
+      font-size: 12px;
+      line-height: 1.48;
+      color: #4A3E1A;
+      position: relative;
+      z-index: 1;
+    }
+
+    .folder-bottom {
+      margin-top: 12px;
+      padding-top: 9px;
+      border-top: 1px solid rgba(120,90,35,0.22);
+      position: relative;
+      z-index: 1;
+    }
+
+    .folder-bottom span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 8px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .locked-drawer {
+      margin-top: 4px;
+      min-height: 66px;
+      border: 1px solid #2A2818;
+      border-top: 1px solid #363520;
+      border-bottom: 1px solid #0E0E08;
+      background: linear-gradient(180deg, #1E1C12 0%, #191810 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 0 20px;
+      opacity: 0.5;
+    }
+
+    .locked-label {
+      background: #EEE9D5;
+      border: 1px solid #B8A860;
+      border-radius: 2px;
+      padding: 6px 14px;
+      flex-shrink: 0;
+    }
+
+    .locked-label span {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #6B5A30;
+      letter-spacing: 0.05em;
+    }
+
+    .locked-label strong {
+      display: block;
+      font-family: 'Source Serif 4', serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: #2A2010;
+      margin-top: 1px;
+    }
+
+    .locked-label em {
+      display: block;
+      font-size: 10px;
+      color: #6B5A30;
+      margin-top: 2px;
+      font-style: normal;
+    }
+
+    .lock {
+      font-size: 20px;
+      color: #4A4030;
+    }
+
+    .cabinet-footer {
+      margin-top: 12px;
+      background: #1A1810;
+      border: 1px solid #2A2818;
+      border-radius: 4px;
+      padding: 8px 16px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .cabinet-footer span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: #5A5030;
+      letter-spacing: 0.08em;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    .footer {
+      background: var(--dark-bg);
+      border-top: 1px solid var(--dark-line);
+      padding: 18px 40px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    body.light .footer {
+      background: var(--light-bg);
+      border-top-color: var(--light-line);
+    }
+
+    .footer-quote {
+      font-family: 'Source Serif 4', serif;
+      font-style: italic;
+      font-size: 13px;
+      color: var(--copper);
+    }
+
+    .footer-tags,
+    .footer-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .footer-tags span,
+    .footer-actions span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      color: var(--dark-muted);
+      text-transform: uppercase;
+    }
+
+    body.light .footer-tags span,
+    body.light .footer-actions span {
+      color: var(--light-muted);
+    }
+
+    .dot {
+      color: var(--copper);
+      margin: 0 8px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(circle at center, rgba(181,103,61,0.1), transparent 42%),
+        rgba(8,7,5,0.93);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 20px;
+      backdrop-filter: blur(7px);
+      cursor: pointer;
+    }
+
+    .modal-backdrop.show {
+      display: flex;
+    }
+
+    .open-folder {
+      width: min(720px, 100%);
+      max-height: 88vh;
+      cursor: default;
+      animation: folderRise 0.24s ease both;
+      position: relative;
+    }
+
+    @keyframes folderRise {
+      from {
+        opacity: 0;
+        transform: translateY(16px) scale(0.98);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      z-index: 20;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #C4B078;
+      background: rgba(248,244,232,0.75);
+      color: #6B5A20;
+      cursor: pointer;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 18px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .open-tab {
+      width: fit-content;
+      min-width: 260px;
+      background: #E5D197;
+      border: 1px solid #BBA96E;
+      border-bottom: none;
+      border-radius: 12px 12px 0 0;
+      padding: 10px 18px 8px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      box-shadow: 0 -6px 20px rgba(0,0,0,0.18);
+    }
+
+    .open-tab span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: #6B4F17;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .folder-lip {
+      height: 38px;
+      background: linear-gradient(180deg, #E8D8A8, #D3B86F);
+      border: 1px solid #BBA96E;
+      border-bottom: none;
+      border-radius: 0 12px 0 0;
+      box-shadow:
+        0 18px 24px rgba(0,0,0,0.24),
+        inset 0 1px 0 rgba(255,255,255,0.28);
+    }
+
+    .folder-paper {
+      background: var(--paper);
+      border: 1px solid #D4C89A;
+      border-top: none;
+      border-radius: 0 0 12px 12px;
+      padding: 34px 38px;
+      max-height: calc(88vh - 74px);
+      overflow-y: auto;
+      color: var(--ink);
+      box-shadow:
+        0 40px 100px rgba(0,0,0,0.72),
+        0 8px 30px rgba(0,0,0,0.4),
+        inset 0 1px 0 rgba(255,255,255,0.42);
+    }
+
+    .file-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .file-meta span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: #8B7040;
+      letter-spacing: 0.04em;
+    }
+
+    .file-type {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--copper);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .folder-paper h2 {
+      font-family: 'Source Serif 4', serif;
+      font-size: 25px;
+      font-weight: 700;
+      color: #0F0D06;
+      line-height: 1.25;
+      margin-bottom: 16px;
+      max-width: 610px;
+    }
+
+    .status-pill {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid;
+      padding: 4px 10px;
+      border-radius: 3px;
+      margin-bottom: 20px;
+    }
+
+    .rule {
+      height: 1px;
+      background: var(--paper-line);
+      margin-bottom: 20px;
+    }
+
+    .modal-desc {
+      font-size: 14px;
+      line-height: 1.65;
+      color: #3A3010;
+      font-style: italic;
+      margin-bottom: 16px;
+    }
+
+    .modal-detail {
+      font-size: 14px;
+      line-height: 1.78;
+      color: var(--ink);
+      margin-bottom: 24px;
+    }
+
+    .dates {
+      display: flex;
+      gap: 24px;
+      padding-top: 16px;
+      border-top: 1px solid #E0D090;
+      flex-wrap: wrap;
+    }
+
+    .dates span {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 9px;
+      color: #8B7040;
+      letter-spacing: 0.03em;
+    }
+
+    @media (max-width: 820px) {
+      .nav,
+      .hero-inner,
+      .archive,
+      .footer {
+        padding-left: 22px;
+        padding-right: 22px;
+      }
+
+      .principles {
+        grid-template-columns: 1fr;
+      }
+
+      .drawer-front {
+        grid-template-columns: 1fr auto;
+        gap: 12px;
+        min-height: auto;
+        padding: 14px;
+      }
+
+      .drawer-label {
+        min-width: 0;
+        width: 100%;
+      }
+
+      .drawer-handle,
+      .drawer-counts {
+        display: none;
+      }
+
+      .folder-stack {
+        grid-template-columns: 1fr;
+      }
+
+      .folder-area {
+        padding-left: 14px;
+        padding-right: 14px;
+      }
+
+      .layer-description {
+        margin-left: 14px;
+        margin-right: 14px;
+      }
+
+      .folder-paper {
+        padding: 30px 24px;
+      }
+
+      .folder-paper h2 {
+        font-size: 22px;
+      }
+
+      .footer {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+    <section class="hero">
+      <nav class="nav">
+        <div class="brand">
+          <span class="brand-title">METAVOXA LABS</span>
+          <a href="https://metavoxa.com">← METAVOXA</a>
         </div>
-      </section>
 
-      <section id="archive" className="mv-archive">
-        <div className="mv-archive-inner">
-          <div className="mv-archive-header">
-            <div className="mv-archive-mini">Lab Archive System</div>
+        <div class="nav-right">
+          <span>LAB STATUS <span class="active-dot">● ACTIVE</span></span>
+          <span>21 JUN 2026</span>
+          <button class="theme-toggle" id="themeToggle" aria-label="Toggle light and dark mode"></button>
+        </div>
+      </nav>
 
-            <div className="mv-archive-title-row">
-              <h2>Five layers. One question.</h2>
-              <span>Click a drawer · Select a folder · Open the file</span>
+      <div class="hero-inner">
+        <div class="kicker">Research Infrastructure for Invisible Populations</div>
+
+        <p class="hero-lead">
+          Traditional research asks: <em>What is happening?</em>
+        </p>
+
+        <h1>
+          MetaVoxa Labs asks:
+          <em>What is happening that our systems are structurally incapable of observing?</em>
+        </h1>
+
+        <div class="copper-line"></div>
+
+        <div class="principles">
+          <article class="principle">
+            <div class="principle-num">01</div>
+            <strong>GDPR-Compliant Data Governance</strong>
+            <p>Frameworks that protect neurodivergent health data across jurisdictions, by design.</p>
+          </article>
+
+          <article class="principle">
+            <div class="principle-num">02</div>
+            <strong>Ethics-Aligned Cohort Design</strong>
+            <p>Populations included from the first inclusion criterion — not added as diversity footnotes.</p>
+          </article>
+
+          <article class="principle">
+            <div class="principle-num">03</div>
+            <strong>Policy Translation</strong>
+            <p>Evidence carried from where it is produced to where it needs to change things.</p>
+          </article>
+        </div>
+
+        <a href="#archive" class="archive-link">Open the Archive ↓</a>
+      </div>
+    </section>
+
+    <section id="archive" class="archive">
+      <div class="archive-inner">
+        <div class="archive-header">
+          <div class="mini">Lab Archive System</div>
+
+          <div class="archive-title-row">
+            <h2>Five layers. One question.</h2>
+            <span>Click a drawer · Select a folder · Open the file</span>
+          </div>
+
+          <div class="header-rule"></div>
+        </div>
+
+        <div class="cabinet">
+          <div class="cabinet-top"></div>
+          <div id="drawerRoot"></div>
+
+          <div class="locked-drawer">
+            <div class="locked-label">
+              <span>06</span>
+              <strong>LAB LOGS</strong>
+              <em>Our thinking in process.</em>
             </div>
-
-            <div className="mv-header-rule" />
+            <div class="drawer-handle"></div>
+            <div class="lock">🔒</div>
           </div>
 
-          <div className="mv-cabinet">
-            <div className="mv-cabinet-top" />
-
-            {LAYERS.map((layer, idx) => (
-              <Drawer
-                key={layer.id}
-                layer={layer}
-                idx={idx}
-                isOpen={openDrawer === idx}
-                onToggle={handleToggle}
-                onCardClick={handleCardClick}
-              />
-            ))}
-
-            <div className="mv-locked-drawer">
-              <div className="mv-locked-label">
-                <span>06</span>
-                <strong>LAB LOGS</strong>
-                <em>Our thinking in process.</em>
-              </div>
-
-              <div className="mv-drawer-handle" />
-
-              <div className="mv-lock">🔒</div>
-            </div>
-
-            <div className="mv-cabinet-footer">
-              <span>
-                METAVOXA LABS · RESEARCH ARCHIVE · OBS-001 — TR-999 · GDPR
-                COMPLIANT
-              </span>
-            </div>
+          <div class="cabinet-footer">
+            <span>METAVOXA LABS · RESEARCH ARCHIVE · OBS-001 — TR-999 · GDPR COMPLIANT</span>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
 
-      <footer className="mv-footer">
-        <span className="mv-footer-quote">
-          We build research infrastructure that surfaces what systems don't see.
-        </span>
+    <footer class="footer">
+      <span class="footer-quote">
+        We build research infrastructure that surfaces what systems don't see.
+      </span>
 
-        <div className="mv-footer-tags">
-          {["GDPR Compliant", "Ethics Aligned", "Human Centric", "Evidence Driven"].map(
-            (t, i) => (
-              <span key={t}>
-                {i > 0 && <span className="mv-dot">·</span>}
-                {t}
-              </span>
-            )
-          )}
-        </div>
+      <div class="footer-tags">
+        <span>GDPR Compliant</span>
+        <span><span class="dot">·</span>Ethics Aligned</span>
+        <span><span class="dot">·</span>Human Centric</span>
+        <span><span class="dot">·</span>Evidence Driven</span>
+      </div>
 
-        <div className="mv-footer-actions">
-          {["Investigate", "Translate", "Influence"].map((w) => (
-            <span key={w}>{w}</span>
-          ))}
-        </div>
-      </footer>
+      <div class="footer-actions">
+        <span>Investigate</span>
+        <span>Translate</span>
+        <span>Influence</span>
+      </div>
+    </footer>
+  </div>
 
-      {selectedCard && (
-        <OpenFolderModal
-          card={selectedCard}
-          prefix={selMeta.prefix}
-          layerName={selMeta.layerName}
-          onClose={() => setSelectedCard(null)}
-        />
-      )}
+  <div class="modal-backdrop" id="modalBackdrop">
+    <div class="open-folder" id="modalContent">
+      <button class="close-btn" id="closeModal">×</button>
+      <div class="open-tab" id="modalTab"></div>
+      <div class="folder-lip"></div>
+      <div class="folder-paper" id="modalPaper"></div>
     </div>
-  );
-}
+  </div>
+
+  <script>
+    const STATUS_C = {
+      "Active": "#7A4020",
+      "Active Research": "#7A4020",
+      "Active Preparation": "#7A4020",
+      "Published": "#2E6830",
+      "Submitted": "#2E6830",
+      "Investigating": "#2A5078",
+      "Research Phase": "#2A5078",
+      "Validation": "#2A5078",
+      "Protocol Stage": "#2A5078",
+      "Development": "#7A4A18",
+      "Evidence Mapping": "#7A4A18",
+      "In Progress": "#7A4A18",
+      "Forming": "#555560"
+    };
+
+    const LAYERS = [
+      {
+        id: "observations",
+        num: "01",
+        prefix: "OBS",
+        name: "Observations",
+        subtitle: "What systems don't see.",
+        description: "Early signals, systemic blind spots, and real-world patterns that conventional systems overlook or misinterpret.",
+        current: [
+          {
+            id: "001",
+            title: "Neurodivergent Women in Healthcare",
+            type: "Clinical Observation",
+            desc: "Clinical experiences frequently minimized, misattributed, or documented inaccurately.",
+            detail: "The clinical room records 'no concerns' for patients whose cultural conditioning teaches that naming struggle is weakness. The observation: the system isn't failing to document these women — it lacks the instrument to document what they actually carry.",
+            status: "Investigating",
+            firstNoted: "12 MAR 2024",
+            updated: "14 JUN 2026"
+          },
+          {
+            id: "002",
+            title: "Masking and Diagnostic Delay",
+            type: "Behavioral Pattern",
+            desc: "The relationship between masking behaviors and delayed or missed diagnoses.",
+            detail: "The most accurate data about masking exists in passive digital environments — phone usage patterns, sleep architecture, keystroke dynamics — not in 20-minute psychiatric interviews. Composed clinical presentation is being recorded as evidence against the complaint.",
+            status: "Investigating",
+            firstNoted: "21 FEB 2024",
+            updated: "03 JUN 2026"
+          },
+          {
+            id: "003",
+            title: "Adaptation Cost in Daily Functioning",
+            type: "Systemic Pattern",
+            desc: "The invisible cognitive and emotional labor required to appear functional.",
+            detail: "When a person adapts successfully to an environment not built for them, the system records the adaptation as evidence of fit. It is not evidence of fit. It is evidence of labor — sustained, invisible, compounding — that accumulates entirely in the body performing it and appears nowhere in any output metric.",
+            status: "Investigating",
+            firstNoted: "05 JAN 2024",
+            updated: "29 MAY 2026"
+          },
+          {
+            id: "004",
+            title: "Categorical Rejection by Systems",
+            type: "Structural Observation",
+            desc: "The moment a system rejects a reality because it lacks the structure to interpret it.",
+            detail: "Institutional 'I don't understand' is structurally indistinguishable from 'that doesn't exist.' The system isn't lying. It genuinely cannot see what it has no language for. This is not malice. It is architecture.",
+            status: "Active",
+            firstNoted: "18 NOV 2023",
+            updated: "10 JUN 2026"
+          }
+        ],
+        reserved: [
+          {
+            id: "00X",
+            title: "Autistic Adults in Pain Pathways",
+            desc: "Pain presentation and reporting patterns rarely captured in standard clinical assessments.",
+            priority: "High",
+            reserved: "02 JUN 2026"
+          },
+          {
+            id: "00X",
+            title: "Global South Neurodiversity Data Gaps",
+            desc: "Severe underrepresentation in neurodiversity research across LMIC contexts.",
+            priority: "High",
+            reserved: "18 APR 2026"
+          },
+          {
+            id: "00X",
+            title: "Intergenerational Diagnostic Patterns",
+            desc: "How diagnostic bias and cultural expectations repeat across generations.",
+            priority: "Medium",
+            reserved: "10 MAY 2026"
+          }
+        ]
+      },
+      {
+        id: "frameworks",
+        num: "02",
+        prefix: "DF",
+        name: "Frameworks",
+        subtitle: "How we make it measurable.",
+        description: "Designing research-grade data frameworks and measurement models for phenomena existing instruments were not built to detect.",
+        current: [
+          {
+            id: "001",
+            title: "ADHD Digital Biomarker",
+            type: "Digital Phenotyping Framework",
+            desc: "Measuring cognitive effort and functional variability in real-world contexts.",
+            detail: "Patent filed: Aktenzeichen 20 2026 002 446.1. Charité feasibility collaboration active. The premise: passive digital monitoring can produce data reliable enough to make the masking load of adult ADHD measurable in a population the clinical room cannot currently see.",
+            status: "Research Phase",
+            firstNoted: "08 SEP 2025",
+            updated: "14 JUN 2026"
+          },
+          {
+            id: "002",
+            title: "Masking Load Index (MLI)",
+            type: "Psychosocial Measurement Framework",
+            desc: "Quantifying invisible labor and compensatory behaviors.",
+            detail: "Rather than asking whether a person appears functional, the MLI asks how much effort is required to maintain that appearance. The question underneath: can the cost of adaptation be quantified — or does measurement itself flatten what it tries to capture?",
+            status: "Validation",
+            firstNoted: "14 NOV 2025",
+            updated: "08 JUN 2026"
+          },
+          {
+            id: "003",
+            title: "Adaptation Cost Framework",
+            type: "Systemic Burden Model",
+            desc: "Assessing the hidden cost of navigating environments not designed for you.",
+            detail: "The cumulative physical, emotional, cognitive, social, and financial burden required to function within an environment not calibrated for one's needs. A system that records adaptation without recording its cost is measuring only part of reality.",
+            status: "Development",
+            firstNoted: "22 JAN 2026",
+            updated: "02 JUN 2026"
+          },
+          {
+            id: "004",
+            title: "Functional Pain Framework",
+            type: "Interpretive & Diagnostic Model",
+            desc: "Improving recognition of pain that does not conform to traditional models.",
+            detail: "Pain presentation varies systematically across neurodivergent populations and cultural contexts. The framework investigates what 'valid pain' looks like when the patient has been trained, across generations, not to produce the clinical register the system recognizes.",
+            status: "Evidence Mapping",
+            firstNoted: "03 MAR 2026",
+            updated: "28 MAY 2026"
+          }
+        ],
+        reserved: [
+          {
+            id: "00X",
+            title: "Neurodivergent Fatigue Model",
+            desc: "A framework to capture fatigue beyond physical exertion.",
+            priority: "High",
+            reserved: "02 JUN 2026"
+          },
+          {
+            id: "00X",
+            title: "Sensor-Informed Clinical Model",
+            desc: "Integrating wearable and self-report data into clinical decision support.",
+            priority: "Medium",
+            reserved: "15 MAY 2026"
+          },
+          {
+            id: "00X",
+            title: "Interpretive Sovereignty Index",
+            desc: "Measuring the right to define and explain one's own experience.",
+            priority: "High",
+            reserved: "20 APR 2026"
+          }
+        ]
+      },
+      {
+        id: "cohorts",
+        num: "03",
+        prefix: "COH",
+        name: "Cohorts",
+        subtitle: "Who we center.",
+        description: "Population design models built around the people existing research infrastructure was not designed to include.",
+        current: [
+          {
+            id: "001",
+            title: "Neurodivergent Women",
+            type: "Primary Research Cohort",
+            desc: "West African born-and-raised women who migrated to Europe between ages 15–25.",
+            detail: "Dr. med. research protocol active at Charité Berlin. Qualitative interview framework designed. The inclusion criteria are specific by design — validity requires honesty about what the data was actually built to hold. Populations included from the first inclusion criterion, not added as diversity footnotes after primary analysis.",
+            status: "Active Research",
+            firstNoted: "06 MAR 2024",
+            updated: "14 JUN 2026"
+          }
+        ],
+        reserved: [
+          {
+            id: "00X",
+            title: "Black Women",
+            desc: "Broader diaspora cohort — diagnostic pathways, institutional navigation, and recognition patterns.",
+            priority: "High",
+            reserved: "—"
+          },
+          {
+            id: "00X",
+            title: "Migrant Populations",
+            desc: "Migration as an undocumented diagnostic variable. Cross-jurisdictional recognition gaps.",
+            priority: "High",
+            reserved: "—"
+          },
+          {
+            id: "00X",
+            title: "Global Health Cohorts",
+            desc: "Cross-cultural neurodivergent cohort in LMIC and underrepresented regions.",
+            priority: "High",
+            reserved: "—"
+          }
+        ]
+      },
+      {
+        id: "evidence",
+        num: "04",
+        prefix: "EV",
+        name: "Evidence",
+        subtitle: "What we learn.",
+        description: "Research outputs — publications, preprints, qualitative archives, and academic collaborations that convert observation into citable evidence.",
+        current: [
+          {
+            id: "001",
+            title: "Zenodo Preprint Archive",
+            type: "Open Access Publications",
+            desc: "Aduhelm efficacy analysis, KEYNOTE-991 protocol review, ADHD digital biomarker feasibility.",
+            detail: "Open-access preprints deposited on Zenodo, reaching the research community with work that has not waited for the peer-review cycle to catch up. Each publication is the institutional-grade version of an observation that began in lived reality.",
+            status: "Published",
+            firstNoted: "15 OCT 2025",
+            updated: "10 JUN 2026"
+          },
+          {
+            id: "002",
+            title: "The Lancet Psychiatry Collaboration",
+            type: "Peer-Reviewed Publication",
+            desc: "Co-authored research in The Lancet Psychiatry. ORCID: 0000-0003-4152-3863.",
+            detail: "The credibility layer. Evidence that the work can survive the institutional validation process it is simultaneously questioning — and that these two things are not contradictions.",
+            status: "Published",
+            firstNoted: "22 AUG 2025",
+            updated: "03 JUN 2026"
+          },
+          {
+            id: "003",
+            title: "365 Pattern Thoughts",
+            type: "Qualitative Evidence Archive",
+            desc: "A year of daily cognitive observations documenting AuDHD lived experience.",
+            detail: "This is not peer-reviewed. It is also more accurate than any clinical scale encountered in the same period. The tension between these two statements is itself a research finding. Pattern Thoughts is evidence of what counts as evidence — and what the current framework excludes by definition.",
+            status: "In Progress",
+            firstNoted: "01 JAN 2026",
+            updated: "21 JUN 2026"
+          },
+          {
+            id: "004",
+            title: "Dr. med. Research Program",
+            type: "Doctoral Research — Charité Berlin",
+            desc: "Qualitative study — cultural non-recognition mechanisms in West African neurodivergent women.",
+            detail: "The question that generated it: Why do the same women who find MetaVoxa online never appear in the clinical system? The study is designed to investigate the mechanisms, not assume the answer.",
+            status: "Protocol Stage",
+            firstNoted: "14 FEB 2026",
+            updated: "08 JUN 2026"
+          }
+        ],
+        reserved: [
+          {
+            id: "00X",
+            title: "Cross-Border Ethics Publication",
+            desc: "What consent means when data subject, collector, and algorithm were trained in three different jurisdictions.",
+            priority: "High",
+            reserved: "—"
+          },
+          {
+            id: "00X",
+            title: "Policy Translation Methodology Paper",
+            desc: "A formal methodology paper on translating lived experience into policy-grade evidence.",
+            priority: "Medium",
+            reserved: "—"
+          }
+        ]
+      },
+      {
+        id: "translation",
+        num: "05",
+        prefix: "TR",
+        name: "Translation",
+        subtitle: "Where it changes systems.",
+        description: "Policy translation, regulatory analysis, and the mechanisms that carry evidence from where it is produced to where it needs to change things.",
+        current: [
+          {
+            id: "001",
+            title: "Falling Walls 2026",
+            type: "Science Breakthrough Pitch",
+            desc: "3 minutes to make neurodivergent African women visible to scientists, investors, and policymakers.",
+            detail: "July 7, 2026. The pitch is not for the judges. It is for the one person in the audience who recognises themselves. Visibility in the wrong room is still visibility — if it brings the right resources back to the people who were never in the room.",
+            status: "Active Preparation",
+            firstNoted: "02 APR 2026",
+            updated: "18 JUN 2026"
+          },
+          {
+            id: "002",
+            title: "ACRP 2027 Submissions",
+            type: "Conference Proposals",
+            desc: "KEYNOTE-991 protocol analysis and ADHD feasibility study for clinical research audiences.",
+            detail: "Translation work — building the credibility and institutional fluency that allows MetaVoxa's core arguments to be received by the rooms that need to hear them. One well-placed, precisely translated piece is worth more than broad distribution of something that lost its specificity in transit.",
+            status: "Submitted",
+            firstNoted: "15 MAY 2026",
+            updated: "15 MAY 2026"
+          },
+          {
+            id: "003",
+            title: "GDPR Article 9 Cross-Border Framework",
+            type: "Regulatory Analysis",
+            desc: "How a database built under EU special-category rules remains usable for African health policymakers.",
+            detail: "The woman in Lagos who needs this database and the woman in Berlin who can build it are separated by more than geography — they are separated by what 'consent' means. Preliminary mapping: Nigerian Data Protection Act 2023, Ghana Data Protection Act 2012, GDPR Article 9.",
+            status: "Forming",
+            firstNoted: "28 MAR 2026",
+            updated: "12 JUN 2026"
+          }
+        ],
+        reserved: [
+          {
+            id: "00X",
+            title: "ECOWAS Health Governance Entry",
+            desc: "Identifying institutional gatekeepers in West African regional health policy.",
+            priority: "High",
+            reserved: "—"
+          },
+          {
+            id: "00X",
+            title: "Nigerian Ministry of Health Pathway",
+            desc: "Neurodivergence as a policy category in national health strategy.",
+            priority: "High",
+            reserved: "—"
+          },
+          {
+            id: "00X",
+            title: "West African Clinical Network",
+            desc: "Carrying validated frameworks into clinical practice across Lagos, Accra, and Freetown.",
+            priority: "Medium",
+            reserved: "—"
+          }
+        ]
+      }
+    ];
+
+    const drawerRoot = document.getElementById("drawerRoot");
+    const modalBackdrop = document.getElementById("modalBackdrop");
+    const modalContent = document.getElementById("modalContent");
+    const modalTab = document.getElementById("modalTab");
+    const modalPaper = document.getElementById("modalPaper");
+    const closeModal = document.getElementById("closeModal");
+    const themeToggle = document.getElementById("themeToggle");
+
+    function escapeHTML(value) {
+      return String(value || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function createFolder(card, layer, isReserved) {
+      const button = document.createElement("button");
+      button.className = `folder-file ${isReserved ? "reserved" : ""}`;
+
+      const statusColor = STATUS_C[card.status] || "#555560";
+      const bottomText = isReserved
+        ? `Priority: ${card.priority || "Reserved"}`
+        : card.status || "Active";
+
+      button.innerHTML = `
+        <div class="folder-tab">
+          <span>${isReserved ? "RESERVED" : escapeHTML(card.status)}</span>
+        </div>
+
+        <div class="side-tab">
+          <span>${escapeHTML(layer.prefix)}-${escapeHTML(card.id)}</span>
+        </div>
+
+        <div class="folder-face">
+          <div class="file-code">${escapeHTML(layer.prefix)}-${escapeHTML(card.id)}</div>
+          <h4>${escapeHTML(card.title)}</h4>
+          <p>${escapeHTML(card.desc)}</p>
+          <div class="folder-bottom">
+            <span style="color:${isReserved ? "#6B5A30" : statusColor};">${escapeHTML(bottomText)}</span>
+          </div>
+        </div>
+      `;
+
+      if (!isReserved) {
+        button.addEventListener("click", () => openFile(card, layer));
+      }
+
+      return button;
+    }
+
+    function renderDrawers() {
+      drawerRoot.innerHTML = "";
+
+      LAYERS.forEach((layer) => {
+        const drawer = document.createElement("div");
+        drawer.className = "drawer";
+
+        drawer.innerHTML = `
+          <button class="drawer-front">
+            <div class="drawer-label">
+              <span>${escapeHTML(layer.num)}</span>
+              <strong>${escapeHTML(layer.name)}</strong>
+              <em>${escapeHTML(layer.subtitle)}</em>
+            </div>
+
+            <div class="drawer-handle"></div>
+
+            <div class="drawer-counts">
+              <span>${layer.current.length} ACTIVE</span>
+              <span>${layer.reserved.length} RESERVED</span>
+            </div>
+
+            <div class="drawer-arrow">›</div>
+          </button>
+
+          <div class="drawer-interior">
+            <div class="drawer-shadow"></div>
+            <p class="layer-description">${escapeHTML(layer.description)}</p>
+
+            <div class="folder-area">
+              <div class="stack-label">
+                <span>Current Files</span>
+                <span>${layer.current.length} active</span>
+              </div>
+
+              <div class="folder-stack current-stack"></div>
+
+              <div class="stack-label reserved">
+                <span>Reserved Files</span>
+                <span>${layer.reserved.length} future</span>
+              </div>
+
+              <div class="folder-stack reserved-stack"></div>
+            </div>
+          </div>
+        `;
+
+        const front = drawer.querySelector(".drawer-front");
+        const currentStack = drawer.querySelector(".current-stack");
+        const reservedStack = drawer.querySelector(".reserved-stack");
+
+        layer.current.forEach((card) => {
+          currentStack.appendChild(createFolder(card, layer, false));
+        });
+
+        layer.reserved.forEach((card) => {
+          reservedStack.appendChild(createFolder(card, layer, true));
+        });
+
+        front.addEventListener("click", () => {
+          document.querySelectorAll(".drawer").forEach((d) => {
+            if (d !== drawer) d.classList.remove("open");
+          });
+          drawer.classList.toggle("open");
+        });
+
+        drawerRoot.appendChild(drawer);
+      });
+    }
+
+    function openFile(card, layer) {
+      const statusColor = STATUS_C[card.status] || "#555560";
+
+      modalTab.innerHTML = `
+        <span>${escapeHTML(layer.prefix)}-${escapeHTML(card.id)}</span>
+        <span>${escapeHTML(layer.name)}</span>
+      `;
+
+      modalPaper.innerHTML = `
+        <div class="file-meta">
+          <span>${escapeHTML(layer.prefix)}-${escapeHTML(card.id)}</span>
+          <span>·</span>
+          <span>${escapeHTML(layer.name).toUpperCase()}</span>
+        </div>
+
+        ${card.type ? `<div class="file-type">${escapeHTML(card.type)}</div>` : ""}
+
+        <h2>${escapeHTML(card.title)}</h2>
+
+        ${card.status ? `
+          <span class="status-pill" style="color:${statusColor}; background:${statusColor}18; border-color:${statusColor}40;">
+            ${escapeHTML(card.status)}
+          </span>
+        ` : ""}
+
+        <div class="rule"></div>
+
+        <p class="modal-desc">${escapeHTML(card.desc)}</p>
+
+        ${card.detail ? `<p class="modal-detail">${escapeHTML(card.detail)}</p>` : ""}
+
+        ${card.firstNoted ? `
+          <div class="dates">
+            <span>First noted: ${escapeHTML(card.firstNoted)}</span>
+            <span>Updated: ${escapeHTML(card.updated)}</span>
+          </div>
+        ` : ""}
+      `;
+
+      modalBackdrop.classList.add("show");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeFile() {
+      modalBackdrop.classList.remove("show");
+      document.body.style.overflow = "";
+    }
+
+    closeModal.addEventListener("click", closeFile);
+
+    modalBackdrop.addEventListener("click", closeFile);
+
+    modalContent.addEventListener("click", (event) => {
+      event.stopPropagation();
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeFile();
+    });
+
+    themeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("light");
+      localStorage.setItem("mv-labs-theme", document.body.classList.contains("light") ? "light" : "dark");
+    });
+
+    const savedTheme = localStorage.getItem("mv-labs-theme");
+    if (savedTheme === "light") {
+      document.body.classList.add("light");
+    }
+
+    renderDrawers();
+  </script>
+</body>
+</html>
