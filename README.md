@@ -2,7 +2,7 @@
 
 **labs.metavoxa.com** — Research infrastructure for invisible populations.
 
-> MetaVoxa Labs designs research-grade data frameworks for neurodivergent global health populations — populations every existing diagnostic instrument was built without. This repo holds the public-facing site for that infrastructure.
+> MetaVoxa Labs designs research-grade data frameworks for neurodivergent global health populations. Populations every existing diagnostic instrument was built without. This repo holds the public-facing site for that infrastructure.
 
 ---
 
@@ -10,7 +10,7 @@
 
 MetaVoxa Labs is not a product. It is not a consultancy. It is research infrastructure — the frameworks, cohort models, measurement systems, and policy translation mechanisms that make previously unmeasurable phenomena measurable.
 
-The site is an archive interface: five layers of work, each holding active entries and reserved slots for future work. The reserved slots are not placeholders. They are principled commitments — work that does not yet have the evidence to justify going live.
+The site is an archive interface: five layers of work, each holding active entries and reserved slots for future work. The reserved slots are principled commitments — work that does not yet have the evidence to justify going live.
 
 ---
 
